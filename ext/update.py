@@ -7,7 +7,7 @@ import requests
 real_path = os.path.realpath(__file__)
 dir_path = os.path.dirname(real_path)
 
-with open(dir_path + '/list.json', 'r') as ext_file:
+with open(f'{dir_path}/list.json', 'r') as ext_file:
     ext = json.load(ext_file)
     with open('cmake/version.cmake', 'w') as version_file:
         output = []
@@ -17,7 +17,7 @@ with open(dir_path + '/list.json', 'r') as ext_file:
 
             github = module['github']
             branch = module['branch']
-            url = 'https://api.github.com/repos/' + github + '/branches/' + branch
+            url = f'https://api.github.com/repos/{github}/branches/{branch}'
 
             response = requests.get(url)
             info = json.loads(response.text)
@@ -38,8 +38,8 @@ with open(dir_path + '/list.json', 'r') as ext_file:
             }
 
             output.append(item)
-            
+
             version_file.write('\nset(' + name + '_GITHUB ' + github + ')\n')
-            version_file.write('set(' + name + '_TAG ' + tag + ')\n')
-        
+            version_file.write(f'set({name}_TAG {tag}' + ')\n')
+
         print(json.dumps(output, indent=4))
